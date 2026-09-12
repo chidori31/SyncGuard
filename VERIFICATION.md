@@ -1,6 +1,16 @@
 # Verification and review decisions
 
-## Current release — v0.2, 2026-09-12
+## Current release — v0.3, 2026-09-12
+
+- Full local Python suite with PostgreSQL: **168 passed**, no database skips, **94.83% backend statement coverage** (90% gate). Two existing dependency deprecation warnings remain.
+- Frontend: **10 actual-HTTP tests passed**, TypeScript/Vite production build passed. Errors are localized; the 60-second deadline includes JSON body reads and mutations are not automatically retried.
+- Ruff check/format and staged Git-blob credential scan passed.
+- Qwen delivered three implementation drafts with tests. Accepted code and corrections are recorded in [docs/delegation/README.md](docs/delegation/README.md). An independent local reviewer confirmed both review fixes; its recheck passed 67 helper/archive tests.
+- GitHub CI includes Python/PostgreSQL, frontend tests/build, Compose HTTP acceptance, and a source ZIP artifact job gated on the checks. Remote CI has not run.
+- Fresh-archive Compose acceptance is the remaining release check; its actual result will be recorded after execution.
+
+
+## Historical v0.2 verification, 2026-09-12
 
 The records below this section describe the historical v0.1 implementation. They are superseded by this v0.2 verification and [Qwen decision log](docs/reviews/DECISIONS.md).
 

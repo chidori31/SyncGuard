@@ -7,7 +7,7 @@ from app.api import router
 from app.core import event
 from app.db import engine
 
-app = FastAPI(title="SyncGuard", version="0.2.0")
+app = FastAPI(title="SyncGuard", version="0.3.0")
 app.include_router(router)
 
 

@@ -2,7 +2,7 @@
 
 **Контроль бизнес-результата интеграций.** HTTP 200 ещё не означает, что закрытая сделка стала заказом в учётной системе.
 
-Рабочий локальный MVP **v0.2**: контроль связи **Bitrix24 ↔ 1С**, HTTP-коннекторы REST/OData, детерминированный Python rule engine, PostgreSQL, FastAPI и React dashboard. В поставку входят HTTP-симуляторы API с синтетическими данными. Groq/Qwen используется отдельным инструментом разработки.
+Рабочий локальный MVP **v0.3**: контроль связи **Bitrix24 ↔ 1С**, HTTP-коннекторы REST/OData, детерминированный Python rule engine, PostgreSQL, FastAPI и React dashboard. В поставку входят HTTP-симуляторы API с синтетическими данными. Groq/Qwen используется отдельным инструментом разработки.
 
 ## Запуск
 
@@ -136,15 +136,16 @@ TEST_DATABASE_URL='postgresql+psycopg://syncguard:syncguard_local_demo@127.0.0.1
 python tools/verify_stack.py
 ```
 
-Она выполняет 11 запусков сценариев, изменяет состояние только локального demo и возвращает его к baseline. В GitHub Actions подготовлены два задания: pytest/PostgreSQL/build и отдельный Compose HTTP acceptance. Фактические результаты локального прогона — в [VERIFICATION.md](VERIFICATION.md).
+Она выполняет 11 запусков сценариев, изменяет состояние только локального demo и возвращает его к baseline. В GitHub Actions подготовлены проверки pytest/PostgreSQL/frontend и Compose HTTP acceptance; после их успеха собирается исходный ZIP с контрольной суммой. Фактические результаты локального прогона — в [VERIFICATION.md](VERIFICATION.md).
 
 Покрываются нормализация, все outcomes, точные границы времени, Decimal, валюты, дедупликация, параллельный первый запуск, rollback, recovery/reopen, UNKNOWN, REST, tenant foreign keys и ограничения БД, sanitizer и ошибки Groq.
 
-Frontend:
+Frontend (Node 22.18+):
 
 ```sh
 cd frontend
 npm ci
+npm test
 npm run build
 ```
 
@@ -166,7 +167,7 @@ Vite проксирует `/api` на порт 8000. Не запускайте �
 
 `backend/constraints.txt` фиксирует проверенные версии Python-пакетов и применяется при установке runtime/dev requirements. Зависимости, специфичные для другой ОС, могут разрешаться отдельно. Frontend использует package-lock.json.
 
-## Настройки и Groq reviewer
+## Настройки и делегирование Qwen
 
 `.env.example` содержит параметры локального демо. При необходимости скопируйте его в `.env`; `.env` исключён из Git. Compose использует отдельные POSTGRES_* переменные, локальный backend — DATABASE_URL. Если меняете пароль существующего PostgreSQL volume, изменение переменной само по себе не меняет пароль уже созданной роли.
 
@@ -174,6 +175,7 @@ Vite проксирует `/api` на порт 8000. Не запускайте �
 
 ```powershell
 $env:GROQ_API_KEY = Read-Host 'Groq API key' -MaskInput
+python tools/ai_helper.py implement "Write a standalone SHA-256 utility with tests" --max-tokens 16384
 python tools/ai_helper.py architect "Review a synthetic deterministic integration architecture"
 python tools/ai_helper.py review "Review this synthetic design decision"
 python tools/ai_helper.py debug "Analyze this synthetic failure"
@@ -181,11 +183,11 @@ python tools/ai_helper.py tests "Suggest deadline boundary tests"
 python tools/ai_helper.py security "Review localhost demo security assumptions"
 ```
 
-Модель: `qwen/qwen3.8-27b`; можно переопределить `GROQ_MODEL`. Режимы architect/debug/security используют high, review/tests — medium. Можно задать `--effort medium --max-tokens 16384`: при проверке крупных файлов high расходовал весь лимит на reasoning без текста ответа. По умолчанию бюджет 12 288 токенов, timeout 120 секунд на запрос, до двух повторов SDK. Код выхода 2 — конфигурация/ввод, 1 — ошибка провайдера или пустой ответ, 0 — ответ. Ошибки не выводят тело ответа или credentials.
+Модель: `qwen/qwen3.8-27b`; можно переопределить `GROQ_MODEL`. Режимы architect/debug/security используют high, review/tests — medium, implement — low. Можно задать `--effort medium --max-tokens 16384`: при проверке крупных файлов high расходовал весь лимит на reasoning без текста ответа. По умолчанию бюджет 12 288 токенов, timeout 120 секунд на запрос, до двух повторов SDK. Код выхода 2 — конфигурация/ввод, 1 — ошибка провайдера, пустой или усечённый ответ, 0 — ответ. Ошибки не выводят тело ответа или credentials.
 
 CLI принимает только явно переданный текст (либо stdin через `-`), не собирает файлы и не читает `.env`. Санитайзер скрывает распознаваемые ключи, токены, пароли, JWT, Authorization, credential URLs и private keys, но не может распознать произвольную конфиденциальную бизнес-информацию. Используйте только синтетический контекст; не передавайте реальные клиентские данные, дампы и закрытые логи.
 
-Правила независимого review — в AGENTS.md, реальные ответы и решения — в [docs/reviews/DECISIONS.md](docs/reviews/DECISIONS.md).
+Правила независимого review — в AGENTS.md, реальные ответы и решения — в [docs/reviews/DECISIONS.md](docs/reviews/DECISIONS.md). В v0.3 Qwen также написал три модуля сборки релиза и тесты; принятые части и исправленные ошибки перечислены в [docs/delegation/README.md](docs/delegation/README.md).
 
 ## Границы MVP
 
@@ -217,3 +219,19 @@ git push -u origin main
 Рабочая папка проекта уже содержит Git-историю. ZIP содержит только исходники: после его распаковки сначала выполните `git init -b main`, `git add .` и `git commit -m "Initial SyncGuard project"`. Отдельный файл SyncGuard.git.bundle сохраняет готовую историю; восстановить её можно командой `git clone -b main SyncGuard.git.bundle SyncGuard`.
 
 GitHub Actions начнёт выполняться после push; успешный удалённый CI до публикации не заявляется.
+
+
+### Сборка исходного релиза
+
+Нужны Git и Python 3.12+, пакеты приложения не требуются. Сначала сохраните изменения коммитом, затем из корня проекта:
+
+```sh
+python tools/check_secrets.py --ref HEAD
+python tools/build_release.py --output ../SyncGuard-source.zip
+```
+
+Сборщик берёт только содержимое выбранного коммита (`--ref`, по умолчанию HEAD). Незакоммиченные изменения и untracked-файлы не попадают в ZIP. Выходной путь должен быть вне репозитория, его каталог должен существовать; существующие ZIP и `.sha256` не перезаписываются. Архив содержит папку SyncGuard и RELEASE-MANIFEST.json с commit SHA и SHA-256 каждого исходного файла. Рядом записывается SHA-256 самого ZIP. Повторная сборка одного коммита тем же Python/zlib даёт одинаковые байты.
+
+Сканер по умолчанию проверяет Git index, а с `--ref` — дерево коммита. Он проверяет распознаваемые Groq/GitHub/PEM-паттерны и запрещает environment-файлы (кроме `.env.example`), ссылки и неразрешённые конфликты. Это ограниченный контроль выбранного снимка, не аудит всей Git-истории и не универсальное обнаружение секретов. В архиве запрещены небезопасные и конфликтующие пути; лимит файла 10 MiB, всех файлов 50 MiB.
+
+GitHub Actions после обеих успешных проверок сохраняет ZIP и checksum как artifact на 14 дней. Это артефакт CI; публичный GitHub Release автоматически не создаётся.

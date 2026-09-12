@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { api } from "./api";
 import {
   Activity,
   ArrowDownUp,
@@ -134,16 +135,6 @@ const outcomeNames: Record<string, string> = {
   synchronization_delay: "Превышен срок",
   healthy_match: "Проверка пройдена",
 };
-async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(path, init);
-  if (!response.ok)
-    throw new Error(
-      response.status === 404
-        ? "Запись не найдена"
-        : `Не удалось выполнить запрос (${response.status}). Проверьте backend и PostgreSQL.`,
-    );
-  return response.json();
-}
 function Badge({ value }: { value: string }) {
   return (
     <span className={`badge ${value.toLowerCase()}`}>
@@ -445,7 +436,7 @@ function App() {
           <span className="demo-avatar">SG</span>
           <div>
             <strong>Локальное демо</strong>
-            <small>HTTP / Memory · v0.2</small>
+            <small>HTTP / Memory · v0.3</small>
           </div>
         </div>
       </aside>

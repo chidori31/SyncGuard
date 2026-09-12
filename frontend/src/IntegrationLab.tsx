@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { api } from "./api";
 import {
   ArrowRight,
   ArrowLeft,
@@ -76,11 +77,7 @@ export function IntegrationLab({
   const [error, setError] = useState("");
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/demo/scenarios", { signal: controller.signal })
-      .then((r) => {
-        if (!r.ok) throw new Error("Не удалось загрузить сценарии");
-        return r.json();
-      })
+    api<Scenario[]>("/api/demo/scenarios", { signal: controller.signal })
       .then(setScenarios)
       .catch((e) => {
         if (e.name !== "AbortError") setError(e.message);
@@ -90,13 +87,9 @@ export function IntegrationLab({
   useEffect(() => {
     if (!integrationId) return;
     const controller = new AbortController();
-    fetch(`/api/integrations/${integrationId}/checks?limit=10`, {
+    api<Run[]>(`/api/integrations/${integrationId}/checks?limit=10`, {
       signal: controller.signal,
     })
-      .then((r) => {
-        if (!r.ok) throw new Error("История проверок недоступна");
-        return r.json();
-      })
       .then((rows) => {
         setRuns(rows);
         setError("");
