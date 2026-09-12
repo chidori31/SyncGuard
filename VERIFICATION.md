@@ -7,7 +7,12 @@
 - Ruff check/format and staged Git-blob credential scan passed.
 - Qwen delivered three implementation drafts with tests. Accepted code and corrections are recorded in [docs/delegation/README.md](docs/delegation/README.md). An independent local reviewer confirmed both review fixes; its recheck passed 67 helper/archive tests.
 - GitHub CI includes Python/PostgreSQL, frontend tests/build, Compose HTTP acceptance, and a source ZIP artifact job gated on the checks. Remote CI has not run.
-- Fresh-archive Compose acceptance is the remaining release check; its actual result will be recorded after execution.
+- Fresh source ZIP from implementation commit `96cddbae8c8ec25c9b11b7769074eb4dbdc58eb8` was SHA-256/manifest verified and extracted without `.git`, `.env` or installed dependencies. It started a separate Compose project on ports 3300/18000/18100/65432 and a newly created PostgreSQL volume. The API incident list was verified empty before seeding.
+- **11 actual-HTTP scenario runs passed from that archive**, through nginx → FastAPI → Bitrix24/1C simulators → fresh PostgreSQL. Recorded evidence: [acceptance-release-http.json](docs/acceptance-release-http.json). Alembic reports no schema drift. Groq SDK is absent from the running backend.
+- First archive build hit `spawnSync esbuild ETXTBSY` during npm install in Docker. Repeating the unchanged frontend build succeeded; npm reported 0 vulnerabilities and TypeScript/Vite passed. The subsequent full Compose run reached four healthy services. A similar upstream failure is documented in [esbuild issue 3156](https://github.com/evanw/esbuild/issues/3156); no application change was made on the basis of that report.
+- Local history audit at the implementation commit checked 95 reachable Git blobs for Groq/GitHub credential patterns: zero findings. This is a bounded pattern check, not a complete secret or security audit.
+- Browser release check: clicking Run completed an HTTP check with three entities and no duplicate incidents. Stopping only the test backend displayed a localized unavailable-service error; starting it and clicking Retry cleared the error. The main localhost:3000 Compose project was rebuilt successfully with its existing database preserved; all four services are healthy and UI shows v0.3.
+- The final documentation commit adds this acceptance record only. Runtime and release-tool source are unchanged from the boot-tested implementation commit; final archive manifests are compared during packaging.
 
 
 ## Historical v0.2 verification, 2026-09-12
