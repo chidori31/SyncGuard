@@ -218,6 +218,8 @@ git push -u origin main
 
 Рабочая папка проекта уже содержит Git-историю. ZIP содержит только исходники: после его распаковки сначала выполните `git init -b main`, `git add .` и `git commit -m "Initial SyncGuard project"`. Отдельный файл SyncGuard.git.bundle сохраняет готовую историю; восстановить её можно командой `git clone -b main SyncGuard.git.bundle SyncGuard`.
 
+Файл RELEASE-MANIFEST.json относится к конкретной сборке и исключён из Git. После инициализации репозитория из ZIP он не попадёт в новый коммит и не помешает следующей сборке релиза.
+
 GitHub Actions начнёт выполняться после push; успешный удалённый CI до публикации не заявляется.
 
 

@@ -14,3 +14,4 @@ coverage/
 .coverage
 htmlcov/
 work/
+/RELEASE-MANIFEST.json
