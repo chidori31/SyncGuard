@@ -1,0 +1,6 @@
+-c backend/constraints.txt
+-r backend/requirements.txt
+groq>=0.30,<1
+pytest>=8,<10
+pytest-cov>=6,<8
+ruff>=0.12,<1
