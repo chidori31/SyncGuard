@@ -1,0 +1,275 @@
+{
+  "passed": true,
+  "transport": "actual HTTP sockets",
+  "scope": "synthetic Bitrix24 / 1C contracts",
+  "checks": [
+    {
+      "scenario": "baseline",
+      "status": "BROKEN",
+      "run_id": "6b8101ec-2f1d-4795-84f6-47ed3e4daab1",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 1,
+          "pages": 1,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "scenario": "baseline",
+      "status": "BROKEN",
+      "run_id": "b4a2cfee-a320-475c-b756-5ed3192ea5ab",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 1,
+          "pages": 1,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "status": "HEALTHY",
+      "run_id": "e8e652b9-ba0d-47f0-9103-3a687221cd8f",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "scenario": "baseline",
+      "status": "BROKEN",
+      "run_id": "f7956702-dd76-4cce-83d7-3b1e953a1376",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 1,
+          "pages": 1,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "scenario": "outage",
+      "status": "UNKNOWN",
+      "run_id": "4b572bc7-b9c6-4af4-b3e3-7cb6b7fa3e9e",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": false
+        },
+        "lookup_complete": false,
+        "failure_phase": "target",
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 3,
+          "pages": 0,
+          "retries": 2,
+          "complete": false
+        }
+      }
+    },
+    {
+      "scenario": "duplicate",
+      "status": "BROKEN",
+      "run_id": "088458da-2d7e-4ca1-abe5-ecbf3dae956a",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "scenario": "wrong_amount",
+      "status": "DELAYED",
+      "run_id": "6bd1a246-f9d6-4212-9828-ef307a7f9411",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "scenario": "delay",
+      "status": "DELAYED",
+      "run_id": "cdb45d81-7c99-424d-adf5-953d50ceaa0e",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "scenario": "healthy",
+      "status": "HEALTHY",
+      "run_id": "67be85ec-1e29-4eff-bd1b-0950e38b6bc0",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "scenario": "pending",
+      "status": "DELAYED",
+      "run_id": "a29c3553-cb1e-417f-a6c5-1e7655c20465",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 1,
+          "pages": 1,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    },
+    {
+      "scenario": "baseline",
+      "status": "BROKEN",
+      "run_id": "11297950-19b0-470b-9bb8-ed3fc2b006bf",
+      "diagnostics": {
+        "connector_health": {
+          "source": true,
+          "target": true
+        },
+        "lookup_complete": true,
+        "source": {
+          "requests": 2,
+          "pages": 2,
+          "retries": 0,
+          "complete": true
+        },
+        "target": {
+          "requests": 1,
+          "pages": 1,
+          "retries": 0,
+          "complete": true
+        }
+      }
+    }
+  ],
+  "source_commit": "96cddbae8c8ec25c9b11b7769074eb4dbdc58eb8",
+  "source_zip_sha256": "2f59c29c68b1032b40c893aa40c4b694f102e07245500b722fb6592922b669e8",
+  "fresh_database_verified": true
+}
